@@ -49,9 +49,12 @@ args = parser.parse_args()
 
 # read results csv
 results = pd.read_csv(args.file)
+last_line = len(results) - 1
+temp = results.loc[0:last_line - 2]
+temp.sort_values(by=['"Image Name"'], inplace=True, ignore_index=True)
+results.loc[0:last_line - 2] = temp
 
 # get subject and experiment info
-last_line = len(results) - 1
 subject_info = results.loc[last_line - 1]
 experiment_info = results.loc[last_line]
 
