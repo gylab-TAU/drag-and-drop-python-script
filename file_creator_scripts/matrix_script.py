@@ -17,7 +17,7 @@ def format_string(string):
 
 # get subject and experiment info
 results = helper.read_csv_from_args(None, None)
-last_line = len(results) - 1
+last_line = len(results) - 2
 subject_info = results.loc[last_line - 1]
 experiment_info = results.loc[last_line]
 
