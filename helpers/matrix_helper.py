@@ -32,14 +32,15 @@ def makeMatrixes(galleries):
 def getMatrices(results):
     # read results csv
     #$results = helper.read_csv_from_args(None, 0)
-    last_line = len(results) - 1
-    temp = results.loc[0:last_line - 2]
+    last_line = len(results) - 4
+    temp = results.loc[0:last_line]
+
     temp.sort_values(by=['"Image Name"'], inplace=True, ignore_index=True)
-    results.loc[0:last_line - 2] = temp
+    results.loc[0:last_line - 3] = temp
 
     # create empty galleries
     gallery_names = []
-    for name in results.iloc[:, 0][0:last_line - 1].drop_duplicates():
+    for name in results.iloc[:, 0][0:last_line].drop_duplicates():
         gallery_names.append(name[1:len(name) - 1])
 
     galleries = {}
@@ -47,7 +48,7 @@ def getMatrices(results):
     for gallery_name in gallery_names:
         galleries[gallery_name] = []
 
-    for index in range(0, last_line - 1):
+    for index in range(0, last_line):
         new_line = []
         new_line.append(results.loc[index][1].replace("\"", ""))
         new_line.append(convert_string_to_number(results.loc[index][2]))
