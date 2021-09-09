@@ -46,9 +46,9 @@ def create_xmeans_no_tsne():
         data = []
 
         for i in range(0, len(df) - 1):
-            row = results.loc[i]
-            x = int(row[2].replace("'", "").replace('"', ""))
-            y = int(row[3].replace("'", "").replace('"', ""))
+            row = df[i]
+            x = row[1]
+            y = row[2]
             line = [x, y]
 
             data.append(line)
@@ -62,7 +62,7 @@ def create_xmeans_no_tsne():
             mapped_clusters.extend(temp)
 
         mapped_clusters.append(screen_dimentions)
-        pd.DataFrame(mapped_clusters).to_csv("cluster_" + gallery + ".csv", index=False)
+        pd.DataFrame(mapped_clusters).to_csv("cluster_" + gallery + ".csv", index=False, index_label=False, header=False)
 
 def create_xmeans_tsne():
     results = helper.read_csv_from_args(None, 0)
