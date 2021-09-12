@@ -8,23 +8,32 @@ def convert_string_to_number(string):
 
 def distance(r1, r2):
     # gets 2 rows: ["img",xpos, ypos] and calculates distance
-    dis = 0
-    dis += math.pow(r1[1] - r2[1], 2)
-    dis += math.pow(r1[2] - r2[2], 2)
+    dis = math.pow(r1[1] - r2[1], 2) + math.pow(r1[2] - r2[2], 2)
+
     return round(math.sqrt(dis),3)
+
+def getMatrixCellValue(rows, i, j):
+    if j == 0:
+        return rows[i][0]
+    else:
+        return distance(rows[i], rows[j])
+
 
 def makeMatrixes(galleries):
     matrixes = {}
     for galleryName, rows in galleries.items():
-        adjMatrix = []
+        #adjMatrix = []
         titleRow  = [None] + [row[0] for row in rows]
-        adjMatrix.append(titleRow)
+
+        adjMatrix = [titleRow if i == 0 else [getMatrixCellValue(rows, i - 1, j - 1) for j in range(len(rows) + 1)] for i in range(len(rows) + 1)]
+
+        """adjMatrix.append(titleRow)
 
         for row in rows:
             adjRow = [row[0]]
             for r in rows:
                 adjRow.append(distance(row,r))
-            adjMatrix.append(adjRow)
+            adjMatrix.append(adjRow)"""
         matrixes[galleryName] = adjMatrix
 
     return matrixes

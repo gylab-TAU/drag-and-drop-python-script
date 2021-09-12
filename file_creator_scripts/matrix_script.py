@@ -25,5 +25,5 @@ def create_matricex():
     subject_info = results.loc[last_line - 1]
     experiment_info = results.loc[last_line]
     matrixes = matrix_helper.getMatrices(pd.DataFrame(results,None, results.columns))
-    subject_id = experiment_info[3]+"1"
+    subject_id = str(experiment_info[3])
     makeFiles(subject_id, matrixes)
