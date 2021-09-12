@@ -1,15 +1,14 @@
-import numpy as np
-import pandas as pd
+from pandas import DataFrame
 from helpers import helper, matrix_helper
-import csv
+from csv import writer
 
 
 def makeFiles(data, matrixes):
     for galleryName, rows in matrixes.items():
         fileName = data + "_" + galleryName
         with open(fileName + ".csv", 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerows(rows)
+            csv_writer = writer(file)
+            csv_writer.writerows(rows)
 
 
 
@@ -24,6 +23,6 @@ def create_matricex():
     last_line = len(results) - 2
     subject_info = results.loc[last_line - 1]
     experiment_info = results.loc[last_line]
-    matrixes = matrix_helper.getMatrices(pd.DataFrame(results,None, results.columns))
+    matrixes = matrix_helper.getMatrices(DataFrame(results,None, results.columns))
     subject_id = str(experiment_info[3])
     makeFiles(subject_id, matrixes)

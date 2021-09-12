@@ -1,6 +1,4 @@
-import math
-from helpers import helper
-import pandas as pd
+from math import sqrt, pow
 
 def convert_string_to_number(string):
     return float(string[1:-1])
@@ -8,35 +6,29 @@ def convert_string_to_number(string):
 
 def distance(r1, r2):
     # gets 2 rows: ["img",xpos, ypos] and calculates distance
-    dis = math.pow(r1[1] - r2[1], 2) + math.pow(r1[2] - r2[2], 2)
+    dis = pow(r1[1] - r2[1], 2) + pow(r1[2] - r2[2], 2)
 
-    return round(math.sqrt(dis),3)
+    return round(sqrt(dis),3)
 
 def getMatrixCellValue(rows, i, j):
-    if j == 0:
+    if j == -1:
         return rows[i][0]
     else:
         return distance(rows[i], rows[j])
 
+def getAdjMatrix(rows):
+    titleRow = [None] + [row[0] for row in rows]
+
+    adjMatrix = [titleRow if i == 0 else [getMatrixCellValue(rows, i - 1, j - 1) for j in range(len(rows) + 1)] for i in
+                 range(len(rows) + 1)]
+
+    return adjMatrix
+
 
 def makeMatrixes(galleries):
-    matrixes = {}
-    for galleryName, rows in galleries.items():
-        #adjMatrix = []
-        titleRow  = [None] + [row[0] for row in rows]
+    matrices = {galleryName: getAdjMatrix(rows) for galleryName, rows in galleries.items()}
 
-        adjMatrix = [titleRow if i == 0 else [getMatrixCellValue(rows, i - 1, j - 1) for j in range(len(rows) + 1)] for i in range(len(rows) + 1)]
-
-        """adjMatrix.append(titleRow)
-
-        for row in rows:
-            adjRow = [row[0]]
-            for r in rows:
-                adjRow.append(distance(row,r))
-            adjMatrix.append(adjRow)"""
-        matrixes[galleryName] = adjMatrix
-
-    return matrixes
+    return matrices
 
 def getMatrices(results):
     # read results csv
@@ -48,22 +40,19 @@ def getMatrices(results):
     results.loc[0:last_line - 3] = temp
 
     # create empty galleries
-    gallery_names = []
-    for name in results.iloc[:, 0][0:last_line].drop_duplicates():
-        gallery_names.append(name[1:len(name) - 1])
+    gallery_names = [name[1:len(name) - 1] for name in results.iloc[:, 0][0:last_line].drop_duplicates()]
 
-    galleries = {}
+    galleries = {gallery_name: [] for gallery_name in gallery_names}
 
-    for gallery_name in gallery_names:
-        galleries[gallery_name] = []
-
-    for index in range(0, last_line):
+    index = 0
+    while index < last_line:
         new_line = []
         new_line.append(results.loc[index][1].replace("\"", ""))
         new_line.append(convert_string_to_number(results.loc[index][2]))
         new_line.append(convert_string_to_number(results.loc[index][3]))
         name = results.loc[index][0]
         galleries[results.loc[index][0][1:len(name) - 1]].append(new_line)
+        index += 1
 
     matrices = makeMatrixes(galleries)
 
