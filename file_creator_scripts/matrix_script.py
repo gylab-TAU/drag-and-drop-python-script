@@ -21,8 +21,7 @@ def format_string(string):
 def create_matricex():
     results = helper.read_csv_from_args(None, 0)
     last_line = len(results) - 2
-    subject_info = results.loc[last_line - 1]
-    experiment_info = results.loc[last_line]
+    experiment_info = results.loc[last_line + 1]
     matrixes = matrix_helper.getMatrices(DataFrame(results,None, results.columns))
     subject_id = str(experiment_info[3])
     makeFiles(subject_id, matrixes)
